@@ -161,7 +161,7 @@ export default function Home() {
               🌍 Browse Counties
             </a>
             <a
-              href="/presidential-rank"
+              href="/presidents"
               className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-300"
             >
               🏆 View Top Presidential Candidates
@@ -338,6 +338,7 @@ function InfoCard({ title, text, borderClass, titleClass }) {
 
 function CandidateSection({ title, list, partyName, countyName, constituencyName }) {
   if (!list?.length) return null;
+
   return (
     <section className="mb-16">
       <h3 className="text-2xl sm:text-3xl font-bold text-blue-800 mb-6 border-b-4 border-blue-200 pb-2">
@@ -348,8 +349,16 @@ function CandidateSection({ title, list, partyName, countyName, constituencyName
         {list.map((c) => (
           <div
             key={c.id}
-            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition"
+            className="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition"
           >
+            {/* Incumbent Badge */}
+            {Boolean(c.is_incumbent) && (
+              <div className="absolute top-4 right-[-60px] rotate-45 bg-blue-600 text-white text-xs font-semibold px-16 py-1 shadow-md">
+                current
+              </div>
+            )}
+
+            {/* Photo */}
             {c.photo ? (
               <img
                 src={mediaURL(c.photo)}
@@ -362,6 +371,7 @@ function CandidateSection({ title, list, partyName, countyName, constituencyName
               </div>
             )}
 
+            {/* Info */}
             <div className="p-4 space-y-1">
               <h4 className="text-lg font-semibold">{c.name}</h4>
               <p className="text-sm text-gray-600">
@@ -377,6 +387,7 @@ function CandidateSection({ title, list, partyName, countyName, constituencyName
               )}
             </div>
 
+            {/* CTA */}
             <a
               href={`/candidateprof/${c.id}`}
               className="block text-center bg-blue-600 text-white py-2 text-sm font-semibold hover:bg-blue-700 transition"

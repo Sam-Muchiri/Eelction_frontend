@@ -96,7 +96,10 @@ const CountiesList = () => {
           href={`/county/${county.id}`}
           className="bg-white hover:bg-purple-50 transition-all duration-300 border border-gray-100 rounded-2xl shadow-md hover:shadow-xl group flex flex-col justify-between"
         >
-          <div className="p-4 flex flex-col justify-between h-full">
+          <div className="p-4 relative overflow-hidden flex flex-col justify-between h-full">
+            <div className="absolute top-2 right-[-60px] rotate-45 bg-cyan-400 text-white text-xs font-semibold px-16 py-1 shadow-md">
+          {county.code}
+          </div>
             {/* County Symbol */}
             <div className="flex items-center justify-center h-36 mb-4 overflow-hidden rounded-xl bg-purple-50">
               {county.symbol ? (

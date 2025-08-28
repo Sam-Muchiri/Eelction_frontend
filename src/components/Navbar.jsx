@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 const Navbar = () => {
-
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav className="bg-white shadow-md top-0 left-0 w-full z-50">
