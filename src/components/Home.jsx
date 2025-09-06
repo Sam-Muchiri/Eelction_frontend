@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { API, mediaURL } from "../api";
-import { Search } from "lucide-react";
+import CandidateSection from "./dynamic/CandidateSection";
+import FilterCard from "./dynamic/FilterCard";
 
 export default function Home() {
   // Countdown
@@ -213,70 +214,14 @@ export default function Home() {
       </section>
 
       {/* Filter */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-            🔍 Filter Candidates by Name, Party, or Office
-          </h2>
-
-          <form
-            className="bg-gray-100 p-6 sm:p-8 rounded-xl shadow-md"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Name */}
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">Name</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                    placeholder="e.g. Wanjohi"
-                    className="w-full rounded-lg border-gray-300 p-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
-                  />
-                  <Search className="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
-                </div>
-              </div>
-
-              {/* Party */}
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">Party</label>
-                <select
-                  value={selectedParty}
-                  onChange={(e) => setSelectedParty(e.target.value)}
-                  className="w-full p-2 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="all">All Parties</option>
-                  {parties.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Position */}
-              <div className="flex flex-col">
-                <label className="text-sm font-medium text-gray-700 mb-1">Office</label>
-                <select
-                  value={selectedPosition}
-                  onChange={(e) => setSelectedPosition(e.target.value)}
-                  className="w-full p-2 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="all">All Offices</option>
-                  <option value="president">President</option>
-                  <option value="governor">Governor</option>
-                  <option value="mp">Member of Parliament</option>
-                </select>
-              </div>
-            </div>
-          </form>
-        </div>
-      </section>
-
+        <FilterCard
+        q={q} setQ={setQ}
+        selectedParty={selectedParty} setSelectedParty={setSelectedParty}
+        selectedPosition={selectedPosition} setSelectedPosition={setSelectedPosition}
+        parties={parties}
+      />
       {/* Candidate sections */}
-      <section id="candidates" className="bg-blue-50">
+       <section id="candidates" className="bg-blue-50">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-10">
           🧑🏾‍💼 Candidates You Can Explore
         </h2>
@@ -284,24 +229,29 @@ export default function Home() {
         <main className="max-w-7xl mx-auto px-6 pb-16">
           <CandidateSection
             title="Presidential Candidates"
-            list={grouped.president}
+            candidates={grouped.president}
             partyName={partyName}
             countyName={countyName}
             constituencyName={constituencyName}
+            mediaURL={mediaURL}
           />
+
           <CandidateSection
             title="Governors"
-            list={grouped.governor}
+            candidates={grouped.governor}
             partyName={partyName}
             countyName={countyName}
             constituencyName={constituencyName}
+            mediaURL={mediaURL}
           />
+
           <CandidateSection
             title="Members of Parliament (MPs)"
-            list={grouped.mp}
+            candidates={grouped.mp}
             partyName={partyName}
             countyName={countyName}
             constituencyName={constituencyName}
+            mediaURL={mediaURL}
           />
         </main>
       </section>
@@ -333,70 +283,5 @@ function InfoCard({ title, text, borderClass, titleClass }) {
       <h3 className={`text-xl font-semibold mb-2 ${titleClass}`}>{title}</h3>
       <p className="text-gray-600">{text}</p>
     </div>
-  );
-}
-
-function CandidateSection({ title, list, partyName, countyName, constituencyName }) {
-  if (!list?.length) return null;
-
-  return (
-    <section className="mb-16">
-      <h3 className="text-2xl sm:text-3xl font-bold text-blue-800 mb-6 border-b-4 border-blue-200 pb-2">
-        {title}
-      </h3>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {list.map((c) => (
-          <div
-            key={c.id}
-            className="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition"
-          >
-            {/* Incumbent Badge */}
-            {Boolean(c.is_incumbent) && (
-              <div className="absolute top-4 right-[-60px] rotate-45 bg-blue-600 text-white text-xs font-semibold px-16 py-1 shadow-md">
-                current
-              </div>
-            )}
-
-            {/* Photo */}
-            {c.photo ? (
-              <img
-                src={mediaURL(c.photo)}
-                alt={c.name}
-                className="w-full h-48 object-cover"
-              />
-            ) : (
-              <div className="bg-blue-100 h-48 flex items-center justify-center text-3xl font-bold text-blue-700">
-                {String(c.name || "?").slice(0, 1)}
-              </div>
-            )}
-
-            {/* Info */}
-            <div className="p-4 space-y-1">
-              <h4 className="text-lg font-semibold">{c.name}</h4>
-              <p className="text-sm text-gray-600">
-                <span className="font-medium">Party:</span> {partyName(c.party)}
-              </p>
-              {c.county && (
-                <p className="text-sm text-gray-600">County: {countyName(c.county)}</p>
-              )}
-              {c.constituency && (
-                <p className="text-sm text-gray-600">
-                  Constituency: {constituencyName(c.constituency)}
-                </p>
-              )}
-            </div>
-
-            {/* CTA */}
-            <a
-              href={`/candidateprof/${c.id}`}
-              className="block text-center bg-blue-600 text-white py-2 text-sm font-semibold hover:bg-blue-700 transition"
-            >
-              View Profile
-            </a>
-          </div>
-        ))}
-      </div>
-    </section>
   );
 }

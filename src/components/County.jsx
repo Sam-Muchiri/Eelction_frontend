@@ -132,46 +132,45 @@ const CountyDetail = () => {
           </div>
         </section>
 
-            <section id="ranking" className="bg-white rounded-2xl shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-purple-800 mb-4">Governor Rankings</h2>
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {governors.map((g, idx) => (
-                  <div key={g.id} className="bg-purple-50 rounded-lg p-4 shadow hover:shadow-lg transition">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
-                        Rank #{idx + 1}
-                      </span>
-                      <span className="text-green-600 font-bold text-lg">{g.score || 0}%</span>
-                    </div>
-                    <h3 className="font-semibold text-purple-700">{g.name}</h3>
-                    <p className="text-sm text-gray-600">Party: {g.party}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-
-          {chartData && (
-            <section className="max-w-3xl mx-auto mt-10 mb-6 px-4">
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-                  Governor Candidate Score Distribution
-                </h2>
-                <div className="relative w-full h-64 sm:h-72 md:h-80">
-                  <Pie
-                    data={chartData}
-                    options={{
-                      responsive: true,
-                      plugins: {
-                        legend: { position: "bottom", labels: { font: { size: 14 }, color: "#4b5563" } },
-                        tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw}%` } }
-                      }
-                    }}
-                  />
+        <section id="ranking" className="bg-white rounded-2xl shadow-md p-6">
+          <h2 className="text-2xl font-semibold text-purple-800 mb-4">Governor Rankings</h2>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {governors.map((g, idx) => (
+              <div key={g.id} className="bg-purple-50 rounded-lg p-4 shadow hover:shadow-lg transition">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
+                    Rank #{idx + 1}
+                  </span>
+                  <span className="text-green-600 font-bold text-lg">{g.score || 0}%</span>
                 </div>
+                <h3 className="font-semibold text-purple-700">{g.name}</h3>
+                <p className="text-sm text-gray-600">Party: {g.party}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+
+        {chartData && (
+            <section className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+                Governor Candidate Score Distribution
+              </h2>
+              <div className="relative w-full h-64 sm:h-72 md:h-80">
+                <Pie
+                  data={chartData}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      legend: { position: "right",align: "center", labels: { font: { size: 14 }, boxWidth: 20,
+                      color: "#4b5563" } },
+                      tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw}%` } }
+                    }
+                  }}
+                />
               </div>
             </section>
-          )}
+        )}
         {/* Constituencies Section */}
         <section id="constituencies" className="py-16 bg-gray-50">
           <div className="max-w-6xl mx-auto px-4">
